@@ -20,7 +20,11 @@
         <div
           v-for="(item, i) in goodClassList"
           :key="i"
-          class="scroll-left-item"
+          :class="[
+            'scroll-left-item',
+            scrollNumber == 'goodList' + i ? 'scroll-left-item-active' : ''
+          ]"
+          @click="scrollTo(i)"
         >
           找{{ item }}
         </div>
@@ -31,9 +35,10 @@
         class="scroll-right"
         :style="{ height: windowHeight + 'px' }"
         @scroll="scrollRight"
+        :scroll-into-view="scrollNumber"
       >
         <div class="good-list" v-for="(item, i) in goodClassList" :key="i">
-          <span class="good-list-span">找{{ item }}</span>
+          <span class="good-list-span" :id="'goodList' + i">找{{ item }}</span>
           <uniGood
             v-for="(item2, i2) in goodList.filter((x) => x.good_class === item)"
             :key="item2.good_id"
@@ -54,7 +59,9 @@ export default {
     return {
       goodList: [],
       windowHeight: Number,
-      goodClassList: []
+      goodClassList: [],
+      scrollNumber: 'goodList0',
+      scrollDistance: [0]
     }
   },
   computed: {},
@@ -64,9 +71,27 @@ export default {
       if (res.meta.status !== 200) return uni.$showMsg()
       this.goodList = res.data
       this.goodClassList = [...new Set(this.goodList.map((x) => x.good_class))]
+      this.calculateScroll()
     },
     scrollRight(e) {
-      console.log(e)
+      for (let i = 0; i < this.scrollDistance.length; i++) {
+        if (
+          e.detail.scrollTop >= this.scrollDistance[i] &&
+          e.detail.scrollTop < this.scrollDistance[i + 1]
+        ) {
+          this.scrollNumber = 'goodList' + i
+        }
+      }
+    },
+    scrollTo(index) {
+      this.scrollNumber = 'goodList' + index
+    },
+    calculateScroll() {
+      let sum = 0
+      this.goodClassList.forEach((x) => {
+        sum += this.goodList.filter((y) => y.good_class === x).length * 100 + 40
+        this.scrollDistance.push(sum)
+      })
     }
   },
   watch: {},
@@ -75,7 +100,6 @@ export default {
   onLoad() {
     this.getGoodList()
     this.windowHeight = uni.getSystemInfoSync().windowHeight - 90
-
     console.log(this.windowHeight)
   }
 }
@@ -128,6 +152,9 @@ export default {
         text-align: center;
         height: 100rpx;
         line-height: 100rpx;
+      }
+      .scroll-left-item-active {
+        background-color: #fff;
       }
     }
     .scroll-right {
