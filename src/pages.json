@@ -1,16 +1,91 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
-			}
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
-	}
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/home/index"
+    },
+    {
+      "path": "pages/drinks/index",
+      "style": {
+        "backgroundColor": "#fff"
+      }
+    },
+    {
+      "path": "pages/order/index"
+    },
+    {
+      "path": "pages/user/index"
+    }
+  ],
+  "globalStyle": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "碧波优购",
+    "navigationBarBackgroundColor": "#f7b52c",
+    "backgroundColor": "#eeeeee",
+    "usingComponents": {
+      //按需引入组件
+      //   "search": "components/uni-search/index",
+      "van-icon": "wxcomponents/icon/index",
+      "van-search": "wxcomponents/search/index",
+      "van-goods-action": "wxcomponents/goods-action/index",
+      "van-goods-action-icon": "wxcomponents/goods-action-icon/index",
+      "van-goods-action-button": "wxcomponents/goods-action-button/index",
+      "van-button": "wxcomponents/button/index",
+      "van-datetime-picker": "wxcomponents/datetime-picker/index",
+      "van-popup": "wxcomponents/popup/index",
+      "van-picker": "wxcomponents/picker/index",
+      "van-field": "wxcomponents/field/index"
+    }
+  },
+  "tabBar": {
+    "color": "#000",
+    "backgroundColor": "#ffffff",
+    "selectedColor": "#f7b52c",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "./static/icon/icon-home.png",
+        "selectedIconPath": "./static/icon/icon-home-active.png"
+      },
+      {
+        "pagePath": "pages/drinks/index",
+        "text": "点餐",
+        "iconPath": "./static/icon/icon-milktea.png",
+        "selectedIconPath": "./static/icon/icon-milktea-active.png"
+      },
+      {
+        "pagePath": "pages/order/index",
+        "text": "取餐",
+        "iconPath": "./static/icon/icon-order.png",
+        "selectedIconPath": "./static/icon/icon-order-active.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "个人主页",
+        "iconPath": "./static/icon/icon-user.png",
+        "selectedIconPath": "./static/icon/icon-user-active.png"
+      }
+    ]
+  },
+  "subPackages": [
+    {
+      "root": "subPackages",
+      "pages": [
+        {
+          "path": "userInfo/index"
+        },
+        {
+          "path": "userRegister/index"
+        },
+        {
+          "path": "userLogin/index",
+          "style": {
+            "navigationBarTitleText": "userLogin"
+          }
+        }
+      ]
+    }
+  ]
 }
