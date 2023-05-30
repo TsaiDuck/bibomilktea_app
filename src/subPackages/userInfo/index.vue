@@ -53,7 +53,6 @@
               <van-datetime-picker
                 type="date"
                 :value="birthday.currentDate"
-                @input="onInput"
                 :min-date="birthday.minDate"
                 :max-date="birthday.now"
                 @confirm="setUserBirthday"
@@ -70,7 +69,7 @@
             <van-popup
               :show="showGenderSelector"
               position="bottom"
-              custom-style="height: 30%;"
+              custom-style="height: 50%;"
               @close="onClose"
             >
               <van-picker
@@ -139,9 +138,6 @@ export default {
   methods: {
     ...mapMutations('m_user', ['logout']),
     ...mapActions('m_user', ['postUpdateUserInfo']),
-    onInput(e) {
-      this.birthday.currentDate = e.detail
-    },
     showDate() {
       this.showDateSelector = true
     },
@@ -152,8 +148,8 @@ export default {
       this.showDateSelector = false
       this.showGenderSelector = false
     },
-    setUserBirthday() {
-      const birthday = new Date(this.birthday.currentDate)
+    setUserBirthday(e) {
+      const birthday = new Date(e)
       const y = birthday.getFullYear()
       const m = birthday.getMonth() + 1
       const d = birthday.getDate()
@@ -164,11 +160,10 @@ export default {
       this.user_info = this.userInfo
     },
     setUserGender(e) {
-      this.user_info.user_gender = e.detail.value
+      this.user_info.user_gender = e.value
       this.onClose()
     },
     saveUserInfo() {
-      console.log(this.user_info)
       this.postUpdateUserInfo(this.user_info)
     },
     back() {
@@ -187,7 +182,8 @@ export default {
     width: 100%;
     height: 160rpx;
     background-color: #fff;
-    position: relative;
+    position: sticky;
+    top: 0;
     .back-content {
       position: absolute;
       bottom: 24rpx;
@@ -257,6 +253,7 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-bottom: 30rpx;
       .btn-save {
         width: 100%;
         line-height: 90rpx;
@@ -268,7 +265,7 @@ export default {
       }
       .text-quit {
         display: block;
-        margin-top: 40rpx;
+        margin: 40rpx 0;
         color: gray;
       }
     }

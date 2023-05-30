@@ -100,12 +100,16 @@ export default {
         user_pwd: this.userInfo.user_pwd
       }
       const { data: res } = await uni.$http.post('/api/user/register', user)
-      if (res.meta.status !== 200)
+      if (res.meta.status == 201) {
+        return uni.$showMsg('账号已被注册，注册失败')
+      } else if (res.meta.status !== 200) {
         return uni.$showMsg('服务器发生错误，注册失败')
-      uni.$showMsg('注册成功')
-      setTimeout(() => {
-        this.postLogin(user)
-      }, 500)
+      } else {
+        uni.$showMsg('注册成功')
+        setTimeout(() => {
+          this.postLogin(user)
+        }, 500)
+      }
     }
   }
 }

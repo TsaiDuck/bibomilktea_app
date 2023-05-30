@@ -8,7 +8,7 @@ import { $http } from '@escook/request-miniprogram'
 // 网络请求相关
 uni.$http = $http
 // 设置请求根路径
-$http.baseUrl = 'http://localhost:3000'
+$http.baseUrl = 'https://www.tsaiduck.cn'
 // 请求拦截器
 $http.beforeRequest = function (options) {
   uni.showLoading({

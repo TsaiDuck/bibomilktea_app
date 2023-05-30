@@ -5,9 +5,14 @@
       <!-- 状态栏遮罩层 -->
       <div class="shadow"></div>
       <!-- 首页logo -->
-      <image src="../../static/icon/icon-home.png" class="nav-logo" />
+      <image
+        src="../../static/icon/icon-home.png"
+        class="nav-logo"
+        @click="gotoHome"
+      />
       <!-- 搜索框 -->
-      <button class="nav-search"><van-icon name="search" />&emsp;搜索</button>
+      <!-- <button class="nav-search"><van-icon name="search" />&emsp;搜索</button> -->
+      <div class="nav-title">碧波奶茶</div>
     </div>
     <!-- 内容区 -->
     <div class="drinks-content">
@@ -71,13 +76,13 @@
               (lastVal, currentVal) =>
                 lastVal +
                 currentVal.good_price * currentVal.count +
-                currentVal.etc.reduce((a, b) => a + b[1], 0),
+                currentVal.etc.reduce((a, b) => a + b[1], 0) * currentVal.count,
               0
             )
             .toFixed(2)
         }}
       </div>
-      <div class="cart-btn">去结算</div>
+      <div class="cart-btn" @click="gotoApply">去结算</div>
     </div>
     <!-- 购物车弹窗信息 -->
     <van-popup
@@ -86,7 +91,7 @@
       position="bottom"
       custom-style="maxheight: 50%"
       @close="closeShowCart"
-      z-index="98"
+      z-index="90"
     >
       <div class="cartInfo">
         <!-- 购物车弹窗标题 -->
@@ -125,8 +130,9 @@
                   ><span style="font-size: 24rpx">￥</span
                   >{{
                     (
-                      Number(item.good_price) * Number(item.count) +
-                      item.etc.reduce((a, b) => a + b[1], 0)
+                      (Number(item.good_price) +
+                        item.etc.reduce((a, b) => a + b[1], 0)) *
+                      Number(item.count)
                     ).toFixed(2)
                   }}</span
                 >
@@ -172,10 +178,12 @@ export default {
     }
   },
   computed: {
-    ...mapState('m_cart', ['cart'])
+    ...mapState('m_cart', ['cart']),
+    ...mapState('m_user', ['userInfo'])
   },
   methods: {
     ...mapMutations('m_cart', ['addCount', 'reduceCount', 'clearCart']),
+    ...mapMutations('m_user', ['setUserInfoByStorage']),
     async getGoodList() {
       const { data: res } = await uni.$http.get('/api/goodlist')
       if (res.meta.status !== 200) return uni.$showMsg()
@@ -209,6 +217,14 @@ export default {
     },
     closeShowCart() {
       this.showCart = false
+    },
+    gotoApply() {
+      if (!this.userInfo.user_state)
+        return uni.$showMsg('您尚未登录，请先登录吧~')
+      uni.navigateTo({ url: '/subPackages/order/index' })
+    },
+    gotoHome() {
+      uni.switchTab({ url: '/pages/home/index' })
     }
   },
   watch: {
@@ -221,8 +237,10 @@ export default {
 
   // 页面周期函数--监听页面加载
   onLoad() {
+    this.setUserInfoByStorage()
     this.getGoodList()
     this.windowHeight = uni.getSystemInfoSync().windowHeight - 90
+    console.log(uni.getSystemInfoSync().windowHeight)
   }
 }
 </script>
@@ -239,6 +257,7 @@ export default {
     background-color: #fff;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: space-evenly;
     box-shadow: 0 1px 1px #eeeeee;
     .shadow {
@@ -264,6 +283,16 @@ export default {
       font-size: 28rpx;
       color: gray;
       background-color: #eeeeee;
+    }
+    .nav-title {
+      width: 300rpx;
+      height: 50rpx;
+      line-height: 50rpx;
+      // border-radius: 30rpx;
+      font-size: 40rpx;
+      text-align: center;
+      color: #000;
+      // background-color: #eeeeee;
     }
   }
   .drinks-content {
@@ -327,6 +356,7 @@ export default {
         width: 32rpx;
         height: 32rpx;
         line-height: 32rpx;
+        font-size: 24rpx;
         border-radius: 50%;
         text-align: center;
         background-color: red;
@@ -426,7 +456,7 @@ export default {
       }
     }
     .cartInfo-space {
-      height: 100rpx;
+      height: 140rpx;
     }
   }
 }

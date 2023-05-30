@@ -5,7 +5,10 @@
     <!-- 内容 -->
     <div class="good-content" @click="openDetail">
       <!-- 商品名 -->
-      <div class="good-name">{{ good.good_name }}</div>
+      <div class="good-name">
+        <span>{{ good.good_name }}</span>
+        <span class="good-sell">销量：{{ good.good_sell }}</span>
+      </div>
       <!-- 商品信息 -->
       <span class="good-info" :style="{ width: setWidth + 'rpx' }">{{
         good.good_info
@@ -53,6 +56,7 @@
       custom-style="height: 65%"
       @close="closeChoice"
       round
+      z-index="100"
     >
       <div class="choice">
         <div class="choice-good-info">
@@ -75,7 +79,14 @@
             </div>
             <div class="choice-good-content-price">
               <span style="font-size: 24rpx; font-weight: small">￥</span>
-              <span>{{ good.good_price.toFixed(2) }}</span>
+              <span>{{
+                (goodSize.size == '中杯'
+                  ? good.good_price + goodSize.etc.reduce((a, b) => a + b[1], 0)
+                  : good.good_price +
+                    2 +
+                    goodSize.etc.reduce((a, b) => a + b[1], 0)
+                ).toFixed(2)
+              }}</span>
             </div>
           </div>
         </div>
@@ -197,10 +208,23 @@ export default {
       this.goodSize.good_id = this.good.good_id
       this.goodSize.good_name = this.good.good_name
       this.goodSize.good_img = this.good.good_img
-      this.goodSize.good_price = this.good.good_price
-      console.log(this.goodSize)
+      this.goodSize.good_price =
+        this.goodSize.size == '中杯'
+          ? this.good.good_price
+          : this.good.good_price + 2
       this.showChoice = false
-      this.addCart(this.goodSize)
+      const temp = JSON.stringify(this.goodSize)
+      this.addCart(JSON.parse(temp))
+      this.initGoodSize()
+    },
+    initGoodSize() {
+      this.goodSize = {
+        size: '中杯',
+        ice: '标准冰',
+        sugar: '七分糖',
+        etc: [],
+        count: 1
+      }
     }
   },
   mounted() {
@@ -230,6 +254,13 @@ export default {
     justify-content: space-between;
     .good-name {
       font-size: 36rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .good-sell {
+        font-size: 28rpx;
+        color: #606060;
+      }
     }
     .good-info {
       font-size: 28rpx;

@@ -28,7 +28,7 @@
       <!-- 下方导航组件 -->
       <div class="user-nav">
         <!-- 订单 -->
-        <div class="user-navbar">
+        <div class="user-navbar" @click="gotoOrder">
           <van-icon name="notes-o" style="font-size: 48rpx; color: orange" />
           <text class="user-nav-text">我的订单</text>
           <van-icon name="arrow" />
@@ -69,6 +69,9 @@ export default {
     },
     setUserInfo() {
       uni.navigateTo({ url: '/subPackages/userInfo/index' })
+    },
+    gotoOrder() {
+      uni.switchTab({ url: '/pages/order/index' })
     }
   },
   watch: {},

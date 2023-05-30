@@ -2,16 +2,19 @@
   "pages": [
     //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
-      "path": "pages/home/index"
-    },
-    {
       "path": "pages/drinks/index",
       "style": {
         "backgroundColor": "#fff"
       }
     },
     {
-      "path": "pages/order/index"
+      "path": "pages/home/index"
+    },
+    {
+      "path": "pages/order/index",
+      "style": {
+        "enablePullDownRefresh": true
+      }
     },
     {
       "path": "pages/user/index"
@@ -35,7 +38,8 @@
       "van-datetime-picker": "wxcomponents/datetime-picker/index",
       "van-popup": "wxcomponents/popup/index",
       "van-picker": "wxcomponents/picker/index",
-      "van-field": "wxcomponents/field/index"
+      "van-field": "wxcomponents/field/index",
+      "van-dialog": "wxcomponents/dialog/index"
     }
   },
   "tabBar": {
@@ -83,6 +87,12 @@
           "path": "userLogin/index",
           "style": {
             "navigationBarTitleText": "userLogin"
+          }
+        },
+        {
+          "path": "order/index",
+          "style": {
+            "navigationBarTitleText": "order"
           }
         }
       ]

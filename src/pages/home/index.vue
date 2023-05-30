@@ -18,24 +18,28 @@
       <!-- 个人信息 -->
       <div class="userInfo">
         <!-- 未登录 -->
-        <div class="notLogin">
+        <div class="notLogin" v-if="!userInfo.user_state">
           <!-- 左侧文字 -->
           <div class="left-text">
             <div class="left-vip">碧波会员</div>
             <text class="left-toVip">成为会员可累计积分</text>
           </div>
           <!-- 右侧按钮 -->
-          <button class="btn-login">登录</button>
+          <button class="btn-login" @click="gotoLogin">登录</button>
         </div>
         <!-- 已登录 -->
-        <!-- <div class="logged-in">
-
-        </div> -->
+        <div class="logged-in" v-else>
+          <image
+            src="../../static/images/00245-3553923336-.png"
+            class="userInfo-img"
+          />
+          <span class="userInfo-username">Hi~{{ userInfo.user_name }}</span>
+        </div>
       </div>
       <!-- 点餐/外卖 -->
       <div class="choose-bread">
         <!-- 点餐 -->
-        <div class="choose-bread-order">
+        <div class="choose-bread-order" @click="gotoDrink">
           <!-- logo -->
           <image
             src="../../static/images/milktea.png"
@@ -49,7 +53,7 @@
           </div>
         </div>
         <!-- 外卖 -->
-        <div class="choose-bread-order" style="bottom-right: 0">
+        <div class="choose-bread-order" @click="tips" style="bottom-right: 0">
           <!-- logo -->
           <image
             src="../../static/images/car.png"
@@ -69,22 +73,34 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {},
   data() {
     return {
       imgPath: [
-        '../../static/images/milktea1.jpeg',
-        '../../static/images/milktea2.jpeg',
-        '../../static/images/milktea3.jpeg',
-        '../../static/images/milktea4.jpeg',
-        '../../static/images/milktea5.jpeg'
+        'https://www.tsaiduck.cn/milktea/00245-3553923336-.png',
+        'https://www.tsaiduck.cn/milktea/00247-360022167.png',
+        'https://www.tsaiduck.cn/milktea/00275-2127629600.png',
+        'https://www.tsaiduck.cn/milktea/00234-1757109792.png',
+        'https://www.tsaiduck.cn/milktea/00246-1679636116.png'
       ]
     }
   },
-  computed: {},
+  computed: {
+    ...mapState('m_user', ['userInfo'])
+  },
   methods: {
-    ...mapMutations('m_user', ['setUserInfoByStorage'])
+    ...mapMutations('m_user', ['setUserInfoByStorage']),
+    gotoLogin() {
+      uni.navigateTo({ url: '/subPackages/userLogin/index' })
+    },
+    gotoDrink() {
+      uni.switchTab({ url: '/pages/drinks/index' })
+    },
+    tips() {
+      uni.$showMsg('本店暂不提供外卖服务~')
+    }
   },
   watch: {},
 
@@ -154,6 +170,21 @@ export default {
           margin: 0;
           line-height: 80rpx;
           border-radius: 18rpx;
+        }
+      }
+      .logged-in {
+        display: flex;
+        align-items: center;
+        .userInfo-img {
+          width: 140rpx;
+          height: 140rpx;
+          border-radius: 50%;
+        }
+        .userInfo-username {
+          display: block;
+          margin-left: 16rpx;
+          font-size: 32rpx;
+          font-weight: 550;
         }
       }
     }

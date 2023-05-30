@@ -21,6 +21,9 @@ export default {
     },
     clearCart(state) {
       state.cart = []
+    },
+    initCart(state) {
+      state.cart = []
     }
   }
 }
